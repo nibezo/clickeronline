@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI, Path, Cookie, Form
 from fastapi.responses import JSONResponse
 import sqlite3 as sq
@@ -24,9 +26,22 @@ with sq.connect('db.sqlite') as con:
     )""")
 
 @app.get("/")
-def main(access_token = Cookie()):
+def main(access_token: Optional[str] = Cookie(default=None)):
+    if access_token == None:
+        return {"message": "Куки нет"}
+    else:
+        return {"message": f"Вот ваш токен: {access_token}"}
 
-    return {"Status": "OK" + access_token}
+def check_token(access_token):
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * from users WHERE token = (?)",(access_token))
+    result = cursor.fetchone()
+    connection.close()
+    isTokenValid = False
+    if result != None:
+        isTokenValid = True
+    return {"isTokenValid": isTokenValid}
 
 def create_user(username, password, access_token):
     connection = sq.connect('db.sqlite')
@@ -65,11 +80,9 @@ def postdata(username: str = Form(min_length=3, max_length=20),
     else:
         update_token(username, password, access_token)
 
-    return {"Token": access_token}
-
-    #response = JSONResponse(content={"message": "куки установлены"})
-    #response.set_cookie(key="token", value=result)
-    #return response
+    response = JSONResponse(content={"message": "OK"})
+    response.set_cookie(key="access_token", value=access_token)
+    return response
 
 @app.get("/click")
 def users(id: int = Path(ge = 1)):
