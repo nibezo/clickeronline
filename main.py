@@ -1,11 +1,14 @@
 from typing import Optional
 
-from fastapi import FastAPI, Path, Cookie, Form
+from fastapi import FastAPI, Path, Cookie, Form, Body
 from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 import sqlite3 as sq
 import hashlib
 import random
 import string
+
 
 def generate_token(length):
     letters = string.ascii_lowercase
@@ -28,14 +31,18 @@ with sq.connect('db.sqlite') as con:
 @app.get("/")
 def main(access_token: Optional[str] = Cookie(default=None)):
     if access_token == None:
-        return {"message": "Куки нет"}
+        return FileResponse("frontend/login/login.html")
     else:
-        return {"message": f"Вот ваш токен: {access_token}"}
+        if(check_token(access_token)):
+            return FileResponse("frontend/app/app.html")
+        else:
+            return {"message": "Такого токена не существует"}
+
 
 def check_token(access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute(f"SELECT * from users WHERE token = (?)",(access_token))
+    cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
     result = cursor.fetchone()
     connection.close()
     isTokenValid = False
@@ -69,8 +76,8 @@ def update_token(username, password, access_token):
     connection.close()
 
 @app.post("/signin")
-def postdata(username: str = Form(min_length=3, max_length=20),
-             password: str =Form(min_length=3, max_length=20)):
+def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
+             password: str =Body(embed=True,min_length=3, max_length=20)):
     password = password.encode()
     password = hashlib.md5(password).hexdigest()
     access_token = generate_token(20)
@@ -84,7 +91,9 @@ def postdata(username: str = Form(min_length=3, max_length=20),
     response.set_cookie(key="access_token", value=access_token)
     return response
 
-@app.get("/click")
+app.mount("/frontend", StaticFiles(directory="frontend"))
+
+@app.get("/log ")
 def users(id: int = Path(ge = 1)):
     return {"user_id": id}
 

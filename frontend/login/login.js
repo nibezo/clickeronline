@@ -13,8 +13,7 @@ async function send(){
     })
 });
     if (response.ok) {
-        const data = await response.json()
-        document.getElementById("message").textContent = data.message
+        location.reload();
     } else
     console.log(response)
 }
