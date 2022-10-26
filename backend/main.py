@@ -2,7 +2,13 @@ from fastapi import FastAPI, Path, Cookie, Form
 from fastapi.responses import JSONResponse
 import sqlite3 as sq
 import hashlib
+import random
+import string
 
+def generate_token(length):
+    letters = string.ascii_lowercase
+    access_token = ''.join(random.choice(letters) for i in range(length))
+    return access_token
 
 app = FastAPI()
 
@@ -22,28 +28,48 @@ def main(access_token = Cookie()):
 
     return {"Status": "OK" + access_token}
 
+def create_user(username, password, access_token):
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute("""INSERT INTO users(username, password, score, token) VALUES (?,?,?,?);""",(username,password,0,access_token))
+    connection.commit()
+    connection.close()
+
+def find_user(username, password):
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * from users WHERE username = (?) AND password = (?)",(username, password))
+    result = cursor.fetchone()
+    connection.close()
+    hasAccount = False
+    if result == None:
+        hasAccount = True
+    return hasAccount
+
+def update_token(username, password, access_token):
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute(f"UPDATE users SET token = (?) WHERE username = (?) AND password = (?)", (access_token, username, password))
+    connection.commit()
+    connection.close()
+
 @app.post("/signin")
 def postdata(username: str = Form(min_length=3, max_length=20),
              password: str =Form(min_length=3, max_length=20)):
     password = password.encode()
     password = hashlib.md5(password).hexdigest()
-    token = "qqqqqqq"
+    access_token = generate_token(20)
+    hasAccount = find_user(username, password)
+    if(hasAccount):
+        create_user(username, password, access_token)
+    else:
+        update_token(username, password, access_token)
 
-    connection = sq.connect('db.sqlite')
-    cursor = connection.cursor()
-    cursor.execute("""INSERT INTO users(username, password, score, token) VALUES (?,?,?,?);""",(username,password,0,token))
-    connection.commit()
-    connection.close()
+    return {"Token": access_token}
 
-    return {"token": token}
-
-@app.post("/signup")
-def postdata(username: str = Form(min_length=3, max_length=20),
-             password: str =Form(min_length=3, max_length=20)):
-
-    response = JSONResponse(content={"message": "куки установлены"})
-    response.set_cookie(key="token", value=result)
-    return response
+    #response = JSONResponse(content={"message": "куки установлены"})
+    #response.set_cookie(key="token", value=result)
+    #return response
 
 @app.get("/click")
 def users(id: int = Path(ge = 1)):
