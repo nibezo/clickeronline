@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"/>    
     <title>Login | ClickerOnline</title>
 </head>
 <body>
-    
+    <div class="login">
+        <img src="logo.png" alt="" width="100px">
+        <p>
+            Введите никнейм: <br/> 
+            <input class="data-input" name="username" id="username" />
+        </p>
+         <p>
+            Введите пароль: <br/> 
+            <input class="data-input" name="password" id="password"/>
+         </p>
+        <button class="send" onclick="send()">Войти/Зарегистрироваться</button>
+    </div>
+    <script src="login.js"></script>
 </body>
 </html>
