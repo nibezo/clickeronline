@@ -35,7 +35,7 @@ def postdata(username: str = Form(min_length=3, max_length=20),
     connection.commit()
     connection.close()
 
-    return {"Status": "OK" + token}
+    return {"token": token}
 
 @app.post("/signup")
 def postdata(username: str = Form(min_length=3, max_length=20),
