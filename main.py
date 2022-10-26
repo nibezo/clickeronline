@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import FastAPI, Path, Cookie, Form, Body
+from fastapi import FastAPI, Path, Cookie, Body
 from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
