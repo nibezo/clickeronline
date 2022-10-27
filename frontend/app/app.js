@@ -1,6 +1,13 @@
 // JSON вернет мне {'Status': 'OK}
 
-function logout() {
-    document.cookie = "name=access_token; expires=-1"
+async function logout() {
+    const response = await fetch("/logout", {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+            'All': 'ok',
+        })
+    });
+    // document.cookie = "name=access_token; expires=-1"
     location.reload()
 }
