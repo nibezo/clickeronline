@@ -91,6 +91,13 @@ def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
     response.set_cookie(key="access_token", value=access_token, max_age=250000)
     return response
 
+@app.post("/logout")
+def logout():
+    response = JSONResponse(content={"message": "OK"})
+    access_token = "False"
+    response.set_cookie(key="access_token", value=access_token, max_age=-1)
+    return response
+
 app.mount("/frontend", StaticFiles(directory="frontend"))
 
 @app.post("/click")
