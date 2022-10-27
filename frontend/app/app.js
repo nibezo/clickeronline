@@ -1,5 +1,19 @@
 // JSON вернет мне {'Status': 'OK}
 
+document.addEventListener("DOMContentLoaded", getUserInfo);
+
+function getUserInfo() {
+    const options = {
+        hostname: 'ru.hexlet.io',
+        path: 'my',
+        method: 'GET', // default
+      }
+      const req = http.request(options, res => {
+        console.log(res.statusCode);
+      });
+      req.end();
+}
+
 async function logout() {
     const response = await fetch("/logout", {
         method: "POST",
@@ -7,6 +21,5 @@ async function logout() {
         body: JSON.stringify({
         })
     });
-    // document.cookie = "name=access_token; expires=-1"
     location.reload()
 }
