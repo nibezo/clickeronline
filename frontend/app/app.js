@@ -5,7 +5,6 @@ async function logout() {
         method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
         body: JSON.stringify({
-            'All': 'ok',
         })
     });
     // document.cookie = "name=access_token; expires=-1"
