@@ -88,14 +88,20 @@ def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
         update_token(username, password, access_token)
 
     response = JSONResponse(content={"message": "OK"})
-    response.set_cookie(key="access_token", value=access_token)
+    response.set_cookie(key="access_token", value=access_token, max_age=250000)
     return response
 
 app.mount("/frontend", StaticFiles(directory="frontend"))
 
-@app.get("/log ")
-def users(id: int = Path(ge = 1)):
-    return {"user_id": id}
+@app.post("/click")
+def click(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE users SET score = score + 1 WHERE token = (?)",(access_token,))
+        connection.commit()
+        connection.close()
+    return {"Status": "OK"}
 
 @app.get("/leaderboard")
 def users(id: int = Path(ge = 1)):
