@@ -6,3 +6,20 @@
     font-family: 'Roboto', sans-serif;
     margin: 0;
 }
+
+body p {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 2rem;
+}
+
+.nickname {
+    font-size: 2rem;
+}
+
+.purchases button {
+    background-color:  #14EC50;
+    border: none;
+    border-radius: 5px;
+    font-size: 2rem;
+}
