@@ -110,6 +110,6 @@ def click(access_token: Optional[str] = Cookie(default=None)):
         connection.close()
     return {"Status": "OK"}
 
-@app.get("/leaderboard")
-def users(id: int = Path(ge = 1)):
+@app.get("/profile")
+def profile():
     return {"user_id": id}
