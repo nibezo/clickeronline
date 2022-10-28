@@ -149,5 +149,4 @@ def leaderboard():
         data[id] = tmp
         id += 1
 
-
     return data
