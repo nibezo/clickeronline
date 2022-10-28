@@ -60,7 +60,7 @@ def create_user(username, password, access_token):
 def find_user(username, password):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute(f"SELECT * from users WHERE username = (?) AND password = (?)",(username, password))
+    cursor.execute("SELECT * from users WHERE username = (?) AND password = (?)",(username, password))
     result = cursor.fetchone()
     connection.close()
     hasAccount = False
@@ -71,7 +71,7 @@ def find_user(username, password):
 def update_token(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute(f"UPDATE users SET token = (?) WHERE username = (?) AND password = (?)", (access_token, username, password))
+    cursor.execute("UPDATE users SET token = (?) WHERE username = (?) AND password = (?)", (access_token, username, password))
     connection.commit()
     connection.close()
 
@@ -105,7 +105,7 @@ def click(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute(f"UPDATE users SET score = score + 1 WHERE token = (?)",(access_token,))
+        cursor.execute("UPDATE users SET score = score + 1 WHERE token = (?)",(access_token,))
         connection.commit()
         connection.close()
         return {"Status": "OK"}
@@ -114,15 +114,40 @@ def click(access_token: Optional[str] = Cookie(default=None)):
 
 @app.get("/profile")
 def profile(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        result = cursor.fetchone()
+        connection.close()
+
+        data = {
+            "username": result[1],
+            "money": result[3],
+        }
+
+        return data
+    else:
+        return {"Status": "Error"}
+
+@app.get("/leaderboard")
+def leaderboard():
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute(f"SELECT * from users WHERE token = (?)",(access_token,))
-    result = cursor.fetchone()
+    cursor.execute("SELECT * FROM users ORDER BY score DESC")
+    result = cursor.fetchmany(10)
     connection.close()
 
-    data = {
-        "username": result[1],
-        "money": result[3],
-    }
+    data = {}
+    id = 1
+
+    for i in range(len(result)):
+        tmp = {
+            "username": result[i][1],
+            "money": result[i][3],
+        }
+        data[id] = tmp
+        id += 1
+
 
     return data
