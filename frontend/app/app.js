@@ -1,12 +1,14 @@
-const data = 'http://127.0.0.1:8000/profile'
+const userData = 'http://127.0.0.1:8000/profile'
+const getLeaderboardData = 'http://127.0.0.1:8000/leaderboard'
 let clickCount = 0
 let userName = ''
 
 document.addEventListener("DOMContentLoaded", getData);
+document.addEventListener("DOMContentLoaded", getLeaderboard);
 
 async function getData() {
     const xhr = new XMLHttpRequest()
-    xhr.open('GET', data, true)
+    xhr.open('GET', userData, true)
     xhr.responseType = 'json'
     xhr.onload = () => {
         console.log(xhr.response)
@@ -19,7 +21,6 @@ async function getData() {
     xhr.send()
     console.log(xhr)
 }
-
 
 async function add() {
     const response = await fetch("/click", {
@@ -41,4 +42,25 @@ async function logout() {
         })
     });
     location.reload()
+}
+
+async function getLeaderboard () {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', getLeaderboardData, true)
+    xhr.responseType = 'json'
+    xhr.onload = () => {
+        console.log(xhr.response['1'])
+        for (id in xhr.response) {
+            console.log(id)
+            document.getElementById('gamers').innerHTML += `
+                <p clsss="user">
+                    <span class="id">${id}</span>
+                    <span class="username">${xhr.response[id]['username']}</span>
+                    <span class="money">${xhr.response[id]['money']}</span>
+                </p>
+            `
+        }
+    }
+    xhr.send()
+    console.log(xhr)
 }
