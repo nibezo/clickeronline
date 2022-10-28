@@ -15,6 +15,7 @@ def generate_token(length):
     access_token = ''.join(random.choice(letters) for i in range(length))
     return access_token
 
+
 app = FastAPI()
 
 with sq.connect('db.sqlite') as con:
@@ -27,6 +28,7 @@ with sq.connect('db.sqlite') as con:
         score INTEGER NOT NULL,
         token TEXT NOT NULL
     )""")
+
 
 @app.get("/")
 def main(access_token: Optional[str] = Cookie(default=None)):
@@ -50,12 +52,14 @@ def check_token(access_token):
         isTokenValid = True
     return {"isTokenValid": isTokenValid}
 
+
 def create_user(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
     cursor.execute("""INSERT INTO users(username, password, score, token) VALUES (?,?,?,?);""",(username,password,0,access_token))
     connection.commit()
     connection.close()
+
 
 def find_user(username, password):
     connection = sq.connect('db.sqlite')
@@ -68,6 +72,7 @@ def find_user(username, password):
         hasAccount = True
     return hasAccount
 
+
 def update_token(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
@@ -75,9 +80,10 @@ def update_token(username, password, access_token):
     connection.commit()
     connection.close()
 
+
 @app.post("/signin")
-def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
-             password: str =Body(embed=True,min_length=3, max_length=20)):
+def postdata(username: str = Body(embed=True,min_length=3, max_length=11),
+             password: str =Body(embed=True,min_length=3, max_length=11)):
     password = password.encode()
     password = hashlib.md5(password).hexdigest()
     access_token = generate_token(20)
@@ -91,6 +97,7 @@ def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
     response.set_cookie(key="access_token", value=access_token, max_age=250000)
     return response
 
+
 @app.post("/logout")
 def logout():
     response = JSONResponse(content={"message": "OK"})
@@ -98,7 +105,9 @@ def logout():
     response.set_cookie(key="access_token", value=access_token, max_age=-1)
     return response
 
+
 app.mount("/frontend", StaticFiles(directory="frontend"))
+
 
 @app.post("/click")
 def click(access_token: Optional[str] = Cookie(default=None)):
@@ -111,6 +120,7 @@ def click(access_token: Optional[str] = Cookie(default=None)):
         return {"Status": "OK"}
     else:
         return {"Status": "Error"}
+
 
 @app.get("/profile")
 def profile(access_token: Optional[str] = Cookie(default=None)):
@@ -130,12 +140,13 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
     else:
         return {"Status": "Error"}
 
+
 @app.get("/leaderboard")
 def leaderboard():
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM users ORDER BY score DESC")
-    result = cursor.fetchmany(10)
+    result = cursor.fetchmany(50)
     connection.close()
 
     data = {}
@@ -148,6 +159,5 @@ def leaderboard():
         }
         data[id] = tmp
         id += 1
-
 
     return data
