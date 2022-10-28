@@ -82,8 +82,8 @@ def update_token(username, password, access_token):
 
 
 @app.post("/signin")
-def postdata(username: str = Body(embed=True,min_length=3, max_length=20),
-             password: str =Body(embed=True,min_length=3, max_length=20)):
+def postdata(username: str = Body(embed=True,min_length=3, max_length=11),
+             password: str =Body(embed=True,min_length=3, max_length=11)):
     password = password.encode()
     password = hashlib.md5(password).hexdigest()
     access_token = generate_token(20)
