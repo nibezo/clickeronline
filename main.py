@@ -114,7 +114,6 @@ def click(access_token: Optional[str] = Cookie(default=None)):
 
 @app.get("/profile")
 def profile(access_token: Optional[str] = Cookie(default=None)):
-    data = {}
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
     cursor.execute(f"SELECT * from users WHERE token = (?)",(access_token,))
