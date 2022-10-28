@@ -146,7 +146,7 @@ def leaderboard():
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM users ORDER BY score DESC")
-    result = cursor.fetchmany(10)
+    result = cursor.fetchmany(50)
     connection.close()
 
     data = {}
