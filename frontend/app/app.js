@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", scorePrepare);
 const data = 'http://127.0.0.1:8000/profile'
+let clickCount = 0
 
 async function getData() {
     const xhr = new XMLHttpRequest()
@@ -19,6 +20,10 @@ async function add() {
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
     });
     console.log('OK')
+    clickCount++
+    document.getElementById('click').value = clickCount
+    console.log(clickCount)
+
 }
 
 async function logout() {
