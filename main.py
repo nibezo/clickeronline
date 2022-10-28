@@ -108,8 +108,22 @@ def click(access_token: Optional[str] = Cookie(default=None)):
         cursor.execute(f"UPDATE users SET score = score + 1 WHERE token = (?)",(access_token,))
         connection.commit()
         connection.close()
-    return {"Status": "OK"}
+        return {"Status": "OK"}
+    else:
+        return {"Status": "Error"}
 
 @app.get("/profile")
-def profile():
-    return {"user_id": id}
+def profile(access_token: Optional[str] = Cookie(default=None)):
+    data = {}
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * from users WHERE token = (?)",(access_token,))
+    result = cursor.fetchone()
+    connection.close()
+
+    data = {
+        "username": result[1],
+        "money": result[3],
+    }
+
+    return data
