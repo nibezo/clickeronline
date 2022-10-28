@@ -100,7 +100,7 @@ def logout():
 
 app.mount("/frontend", StaticFiles(directory="frontend"))
 
-@app.get("/click")
+@app.post("/click")
 def click(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
         connection = sq.connect('db.sqlite')
