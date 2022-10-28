@@ -1,6 +1,7 @@
-document.addEventListener("DOMContentLoaded", scorePrepare);
 const data = 'http://127.0.0.1:8000/profile'
 let clickCount = 0
+
+document.addEventListener("DOMContentLoaded", getData);
 
 async function getData() {
     const xhr = new XMLHttpRequest()
@@ -8,6 +9,8 @@ async function getData() {
     xhr.responseType = 'json'
     xhr.onload = () => {
         console.log(xhr.response)
+        clickCount = xhr.response['money']
+        document.getElementById('score').innerHTML = `${clickCount}$`
     }
     xhr.send()
     console.log(xhr)
@@ -16,12 +19,12 @@ async function getData() {
 
 async function add() {
     const response = await fetch("/click", {
-        method: "GET",
+        method: "POST",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
     });
     console.log('OK')
     clickCount++
-    document.getElementById('click').value = clickCount
+    document.getElementById('score').innerHTML = `${clickCount}$`
     console.log(clickCount)
 
 }
