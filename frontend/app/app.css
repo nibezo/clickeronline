@@ -22,7 +22,7 @@ body p {
 main {
     display: flex;
     flex-direction: row;
-    margin-top: 60px;
+    margin-top: 0px;
     flex: 3;
 }
 
