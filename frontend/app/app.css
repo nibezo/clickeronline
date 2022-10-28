@@ -166,9 +166,7 @@ main {
 
 .gamers {
     margin-left: 100px;
-}
-.gamers li {
-    font-size: 2rem;
+    font-size: 5rem;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 .leader-board::-webkit-scrollbar {
