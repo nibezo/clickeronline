@@ -54,9 +54,9 @@ async function getLeaderboard () {
             console.log(id)
             document.getElementById('gamers').innerHTML += `
                 <p clsss="user">
-                    <span class="id">${id}</span>
-                    <span class="username">${xhr.response[id]['username']}</span>
-                    <span class="money">${xhr.response[id]['money']}</span>
+                    <span class="id">${id}.</span>
+                    <span class="username">${xhr.response[id]['username']} - </span>
+                    <span class="money"><b>${xhr.response[id]['money']}$</b></span>
                 </p>
             `
         }
