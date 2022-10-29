@@ -192,8 +192,8 @@ main {
     scrollbar-width: none;  /* Firefox */
 }
 
-@media screen and (min-width: 900px) {
-    article {
-      padding: 1rem 3rem;
+@media screen and (max-width: 1530px) {
+    .purchases {
+        flex: 1.3;
     }
 }
