@@ -1,3 +1,9 @@
+function enterKeyPressed(event) {
+    if (event.keyCode == 13) {
+        send()
+    }
+ }
+
 async function send(){
     // getting user's password and login
     const username = document.getElementById("username").value

@@ -13,11 +13,11 @@
         <img src="/frontend/assets/logo.png" alt="" width="100px">
         <p>
             Введите никнейм: <br/> 
-            <input class="data-input" name="username" id="username" />
+            <input class="data-input" name="username" id="username" onkeypress="enterKeyPressed(event)" />
         </p>
          <p>
             Введите пароль: <br/> 
-            <input class="data-input" name="password" id="password"/>
+            <input class="data-input" name="password" id="password" type="password" onkeypress="enterKeyPressed(event)"/>
          </p>
         <button class="send" onclick="send()">Войти/Зарегистрироваться</button>
     </div>
