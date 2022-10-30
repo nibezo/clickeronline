@@ -35,6 +35,7 @@ main {
     grid-template-rows: 1fr 1fr;
     margin-top: 100px;
     color: white;
+    justify-content: center;
     justify-items: center;
 }
 
@@ -197,3 +198,50 @@ main {
         flex: 1.3;
     }
 }
+
+@media screen and (max-width: 1530px) {
+    .purchases {
+        flex: 1.6;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .purchases {
+        flex: 1.9;
+    }
+    
+    .clicker {
+        flex: 0.8;
+    }
+}
+
+@media screen and (max-width: 1085px) {
+    .purchases {
+        flex: 1.9;
+    }
+    
+    .clicker {
+        flex: 0.8;
+    }
+}
+
+@media screen and (max-width: 1085px) {
+    main {
+        flex-direction: column;
+    }
+
+    .clicker {
+        margin-top: 50px;
+        flex: 0.8;
+    }
+
+    .purchases {
+        order: 1;
+        flex: 1;
+    }
+
+    .information {
+        order: 1;
+    }
+}
+
