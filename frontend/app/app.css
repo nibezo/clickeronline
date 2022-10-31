@@ -203,6 +203,14 @@ main {
     .purchases {
         flex: 1.6;
     }
+
+    .gamers p span {
+        font-size: 1rem;
+    }
+    
+    .gamers p span b {
+        font-size: 1rem;
+    }
 }
 
 @media screen and (max-width: 1150px) {
@@ -238,10 +246,24 @@ main {
     .purchases {
         order: 1;
         flex: 1;
+        margin-top: 30px;
     }
 
     .information {
         order: 1;
+        margin-top: 40px;
+        margin-bottom: 50px;
+    }
+
+    .leader-board {
+        margin-top: 30px;
+    }
+
+    .gamers p span {
+        font-size: 2rem;
+    }
+    
+    .gamers p span b {
+        font-size: 2rem;
     }
 }
-
