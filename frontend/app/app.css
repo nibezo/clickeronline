@@ -37,6 +37,7 @@ main {
     color: white;
     justify-content: center;
     justify-items: center;
+    align-items: end;
 }
 
 .purchases div {
@@ -73,6 +74,10 @@ main {
     border: none;
     border-radius: 5px;
     font-size: 2rem;
+}
+
+#meme {
+    background-color:  #14d6ec;
 }
 
 .clicker {
@@ -264,6 +269,12 @@ main {
     }
     
     .gamers p span b {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 1085px) {
+    .server p, .iphone p, .pc p, .meme p  {
         font-size: 2rem;
     }
 }
