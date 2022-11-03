@@ -8,7 +8,6 @@ import sqlite3 as sq
 import hashlib
 import random
 import string
-import uvicorn
 
 
 def generate_token(length):
@@ -162,7 +161,3 @@ def leaderboard():
         id += 1
 
     return data
-
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", port=5000, host='109.68.215.145', reload=True)
