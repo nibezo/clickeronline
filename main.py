@@ -161,3 +161,23 @@ def leaderboard():
         id += 1
 
     return data
+
+@app.get("/buymeme")
+def profile(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        meme_price = 100
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        result = cursor.fetchone()
+        connection.close()
+
+        if(result[3] >= meme_price):
+            connection = sq.connect('db.sqlite')
+            cursor = connection.cursor()
+            cursor.execute("UPDATE users SET score = score - 100 WHERE token = (?)", (access_token,))
+            connection.commit()
+            connection.close()
+            return {"Status": "OK"}
+        else:
+            return {"Status": "Error"}
