@@ -7,3 +7,4 @@
 .idea/inspectionProfiles/Project_Default.xml
 __pycache__/main.cpython-39.pyc
 .idea/.gitignore
+.vscode/settings.json

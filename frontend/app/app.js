@@ -1,5 +1,6 @@
 const userData = 'http://127.0.0.1:8000/profile'
 const getLeaderboardData = 'http://127.0.0.1:8000/leaderboard'
+const buyAMeme = 'http://127.0.0.1:8000/buymeme'
 let clickCount = 0
 let userName = ''
 
@@ -31,7 +32,6 @@ async function add() {
     clickCount++
     document.getElementById('score').innerHTML = `${clickCount}$`
     console.log(clickCount)
-
 }
 
 async function logout() {
@@ -51,7 +51,6 @@ async function getLeaderboard () {
     xhr.onload = () => {
         console.log(xhr.response['1'])
         for (id in xhr.response) {
-            console.log(id)
             document.getElementById('gamers').innerHTML += `
                 <p clsss="user">
                     <span class="id">${id}.</span>
@@ -63,4 +62,18 @@ async function getLeaderboard () {
     }
     xhr.send()
     console.log(xhr)
+}
+
+async function buyMeme() {
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', buyAMeme, true)
+    xhr.responseType = 'json'
+    xhr.onload = () => {
+        if (xhr.response['Status'] === 'OK') {
+            console.log(clickCount)
+            getData()
+            getLeaderboard()
+        }
+    }
+    xhr.send()
 }
