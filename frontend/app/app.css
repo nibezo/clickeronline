@@ -198,6 +198,13 @@ main {
     scrollbar-width: none;  /* Firefox */
 }
 
+#meme {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px;
+}
+
 @media screen and (max-width: 1530px) {
     .purchases {
         flex: 1.3;

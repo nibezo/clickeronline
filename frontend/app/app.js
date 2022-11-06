@@ -73,7 +73,14 @@ async function buyMeme() {
             console.log(clickCount)
             getData()
             getLeaderboard()
+            let memeNum = getRandomIntInRange(1, 425)
+            document.getElementById('meme').innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px">`
         }
     }
     xhr.send()
 }
+
+function getRandomIntInRange(from, to) {
+    let x = Math.random()+from;
+    return Math.floor(Math.random() * to);
+  }
