@@ -285,3 +285,26 @@ main {
         font-size: 2rem;
     }
 }
+
+@media screen and (max-width: 650px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 414px) {
+    * {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .clicker button {
+        height: 90px;
+        width: 250px;
+    }
+
+    * {
+        font-size: 9px;
+    }
+}
