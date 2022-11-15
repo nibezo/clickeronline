@@ -50,6 +50,7 @@ async function getLeaderboard () {
     xhr.responseType = 'json'
     xhr.onload = () => {
         console.log(xhr.response['1'])
+        if (document.getElementById('gamers'))
         for (id in xhr.response) {
             document.getElementById('gamers').innerHTML += `
                 <p clsss="user">
@@ -72,7 +73,6 @@ async function buyMeme() {
         if (xhr.response['Status'] === 'OK') {
             console.log(clickCount)
             getData()
-            getLeaderboard()
             let memeNum = getRandomIntInRange(1, 425)
             document.getElementById('meme').innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px">`
         }
