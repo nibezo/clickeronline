@@ -72,9 +72,9 @@ async function buyMeme() {
     xhr.onload = () => {
         if (xhr.response['Status'] === 'OK') {
             console.log(clickCount)
-            getData()
+            getData() 
             let memeNum = getRandomIntInRange(1, 425)
-            document.getElementById('meme').innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px">`
+            document.getElementById('meme').innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px" onerror="javascript: buyMeme()">`
         }
     }
     xhr.send()
