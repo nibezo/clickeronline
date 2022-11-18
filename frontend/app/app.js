@@ -81,6 +81,11 @@ async function buyMeme() {
 }
 
 function getRandomIntInRange(from, to) {
-    let x = Math.random()+from;
-    return Math.floor(Math.random() * to);
-  }
+    let bad = [291, 315, 317, 319, 321, 323, 325, 327, 329, 331, 333, 335, 337, 339, 341, 343, 345, 347, 349, 351, 353, 355, 357, 359, 361, 363, 365, 314, 318, 322, 326, 330, 334, 338, 342, 346, 350, 354, 358, 362, 366, 320, 328, 336, 344, 352, 360, 316, 332, 348, 364, 340, 324, 356]
+    let result = Math.random()+from;
+    result = Math.floor(Math.random() * to);
+    while (bad.includes(result)) {
+        result = Math.floor(Math.random() * to);
+    }
+    return result;
+}
