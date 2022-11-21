@@ -105,11 +105,6 @@ main {
     font-size: 4rem;
 }
 
-.speed {
-    margin-top: 20px;
-    font-size: 3rem;
-}
-
 .information {
     flex: 1;
     display: flex;
