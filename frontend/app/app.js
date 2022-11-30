@@ -1,6 +1,6 @@
-const userData = 'http://127.0.0.1:8000/profile'
-const getLeaderboardData = 'http://127.0.0.1:8000/leaderboard'
-const buyAMeme = 'http://127.0.0.1:8000/buymeme'
+const userData = 'http://109.68.215.145//profile'
+const getLeaderboardData = 'http://109.68.215.145//leaderboard'
+const buyAMeme = 'http://109.68.215.145//buymeme'
 let clickCount = 0
 let userName = ''
 
