@@ -34,11 +34,8 @@ async function add() {
     document.getElementById('score').innerHTML = `${clickCount}$`
     console.log(clickCount)
     let color = getRandomColor()
-    let allElements = document.getElementsByTagName("*");
-    for (let i = 0, len = allElements.length; i < len; i++) {
-        let element = allElements[i];
-        element.style.backgroundColor = color 
-    }
+    let a = document.getElementsByTagName("body")
+    a[0].style.backgroundColor = color;
 }
 
 async function logout() {
