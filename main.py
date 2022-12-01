@@ -222,7 +222,7 @@ def king(access_token: Optional[str] = Cookie(default=None)):
 @app.get("/boost")
 def boost(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
-        boost_price = 500
+        boost_price = 300
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
         cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
@@ -233,7 +233,7 @@ def boost(access_token: Optional[str] = Cookie(default=None)):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             boost_time = int(time.time())
-            cursor.execute("UPDATE users SET score = score - 500 WHERE token = (?)", (access_token,))
+            cursor.execute("UPDATE users SET score = score - 300 WHERE token = (?)", (access_token,))
             cursor.execute("UPDATE users SET boost = (?) WHERE token = (?)", (boost_time,access_token))
             connection.commit()
             connection.close()
