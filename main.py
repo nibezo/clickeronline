@@ -8,7 +8,7 @@ import sqlite3 as sq
 import hashlib
 import random
 import string
-
+import time
 
 def generate_token(length):
     letters = string.ascii_lowercase
@@ -26,7 +26,13 @@ with sq.connect('db.sqlite') as con:
         username TEXT NOT NULL,
         password TEXT NOT NULL,
         score INTEGER NOT NULL,
-        token TEXT NOT NULL
+        token TEXT NOT NULL,
+        boost TEXT NOT NULL
+    )""")
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS king(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL
     )""")
 
 
@@ -109,15 +115,22 @@ def logout():
 app.mount("/frontend", StaticFiles(directory="frontend"))
 
 
-@app.post("/click")
+@app.get("/click")
 def click(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("UPDATE users SET score = score + 1 WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
+        result = cursor.fetchone()
+        current_time = int(time.time())
+        click_count = 1
+        if current_time - int(result[5]) <= 60:
+            click_count = 5
+
+        cursor.execute("UPDATE users SET score = score + (?) WHERE token = (?)",(click_count,access_token,))
         connection.commit()
         connection.close()
-        return {"Status": "OK"}
+        return {"click": click_count}
     else:
         return {"Status": "Error"}
 
@@ -129,11 +142,14 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
         cursor = connection.cursor()
         cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
         result = cursor.fetchone()
+        cursor.execute("SELECT * from king ORDER BY id DESC LIMIT 1")
+        king = cursor.fetchone()
         connection.close()
 
         data = {
             "username": result[1],
             "money": result[3],
+            "king": king[1],
         }
 
         return data
@@ -176,6 +192,49 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             cursor.execute("UPDATE users SET score = score - 100 WHERE token = (?)", (access_token,))
+            connection.commit()
+            connection.close()
+            return {"Status": "OK"}
+        else:
+            return {"Status": "Error"}
+
+@app.get("/king")
+def king(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        king_price = 1000
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        result = cursor.fetchone()
+        connection.close()
+
+        if(result[3] >= king_price):
+            connection = sq.connect('db.sqlite')
+            cursor = connection.cursor()
+            cursor.execute("UPDATE users SET score = score - 1000 WHERE token = (?)", (access_token,))
+            cursor.execute("""INSERT INTO king(username) VALUES (?);""",(result[1],))
+            connection.commit()
+            connection.close()
+            return {"Status": "OK"}
+        else:
+            return {"Status": "Error"}
+
+@app.get("/boost")
+def boost(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        boost_price = 500
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        result = cursor.fetchone()
+        connection.close()
+
+        if(result[3] >= boost_price):
+            connection = sq.connect('db.sqlite')
+            cursor = connection.cursor()
+            boost_time = int(time.time())
+            cursor.execute("UPDATE users SET score = score - 500 WHERE token = (?)", (access_token,))
+            cursor.execute("UPDATE users SET boost = (?) WHERE token = (?)", (boost_time,access_token))
             connection.commit()
             connection.close()
             return {"Status": "OK"}
