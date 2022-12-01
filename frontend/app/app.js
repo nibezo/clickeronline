@@ -3,6 +3,7 @@ const getLeaderboardData = '/leaderboard'
 const buyAMeme = '/buymeme'
 let clickCount = 0
 let userName = ''
+let colors = ['#FBF8CC', '#FDE4CF', '#FFCFD2', '#F1C0E8', '#CFBAF0', '#A3C4F3', '#8EECF5', '#98F5E1', '#B9FBC0']
 
 document.addEventListener("DOMContentLoaded", getData);
 document.addEventListener("DOMContentLoaded", getLeaderboard);
@@ -32,6 +33,12 @@ async function add() {
     clickCount++
     document.getElementById('score').innerHTML = `${clickCount}$`
     console.log(clickCount)
+    let color = getRandomColor()
+    let allElements = document.getElementsByTagName("*");
+    for (let i = 0, len = allElements.length; i < len; i++) {
+        let element = allElements[i];
+        element.style.backgroundColor = color 
+    }
 }
 
 async function logout() {
@@ -88,4 +95,8 @@ function getRandomIntInRange(from, to) {
         result = Math.floor(Math.random() * to);
     }
     return result;
+}
+
+function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)]
 }
