@@ -79,6 +79,20 @@ def find_user(username, password):
     return hasAccount
 
 
+def wrong_password(username, password):
+    connection = sq.connect('db.sqlite')
+    cursor = connection.cursor()
+    cursor.execute("SELECT * from users WHERE username = (?)",(username,))
+    result = cursor.fetchone()
+    connection.close()
+
+    wrong_password = False
+    if result != None and result[2] != password:
+        wrong_password = True
+
+    return wrong_password
+
+
 def update_token(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
@@ -95,7 +109,10 @@ def postdata(username: str = Body(embed=True,min_length=3, max_length=11),
     access_token = generate_token(20)
     hasAccount = find_user(username, password)
     if(hasAccount):
-        create_user(username, password, access_token)
+        if(wrong_password(username, password)):
+            return False
+        else:
+            create_user(username, password, access_token)
     else:
         update_token(username, password, access_token)
 
@@ -147,12 +164,18 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
         result = cursor.fetchone()
         cursor.execute("SELECT * from king ORDER BY id DESC LIMIT 1")
         king = cursor.fetchone()
+
+        if king == None:
+            king = "Короля нет!"
+        else:
+            king = king[1]
+
         connection.close()
 
         data = {
             "username": result[1],
             "money": result[3],
-            "king": king[1],
+            "king": king,
         }
 
         return data
@@ -181,6 +204,7 @@ def leaderboard():
 
     return data
 
+
 @app.get("/buymeme")
 def profile(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
@@ -200,6 +224,7 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
             return {"Status": "OK"}
         else:
             return {"Status": "Error"}
+
 
 @app.get("/king")
 def king(access_token: Optional[str] = Cookie(default=None)):
@@ -221,6 +246,7 @@ def king(access_token: Optional[str] = Cookie(default=None)):
             return {"Status": "OK"}
         else:
             return {"Status": "Error"}
+
 
 @app.get("/boost")
 def boost(access_token: Optional[str] = Cookie(default=None)):
