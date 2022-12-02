@@ -119,8 +119,8 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30px;
-  width: 30px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
   background-color: #ff5959;
 }
@@ -221,6 +221,10 @@ main {
 
 #king {
   background-color: #ffb805;
+}
+
+#wipe {
+  background-color: red;
 }
 
 @media screen and (max-width: 1530px) {
