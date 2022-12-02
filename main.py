@@ -240,3 +240,24 @@ def boost(access_token: Optional[str] = Cookie(default=None)):
             return {"Status": "OK"}
         else:
             return {"Status": "Error"}
+
+
+@app.get("/wipe")
+def wipe(access_token: Optional[str] = Cookie(default=None)):
+    if access_token != None and check_token(access_token):
+        wipe_price = 1000000
+        connection = sq.connect('db.sqlite')
+        cursor = connection.cursor()
+        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        result = cursor.fetchone()
+        connection.close()
+
+        if(result[3] >= wipe_price):
+            connection = sq.connect('db.sqlite')
+            cursor = connection.cursor()
+            cursor.execute("UPDATE users SET score = 0")
+            connection.commit()
+            connection.close()
+            return {"Status": "OK"}
+        else:
+            return {"Status": "Error"}
