@@ -26,7 +26,7 @@ async function getData() {
 
 async function add() {
     const response = await fetch("/click", {
-        method: "POST",
+        method: "GET",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
     });
     console.log('OK')
