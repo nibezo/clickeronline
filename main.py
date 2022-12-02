@@ -124,8 +124,11 @@ def click(access_token: Optional[str] = Cookie(default=None)):
         result = cursor.fetchone()
         current_time = int(time.time())
         click_count = 1
-        if current_time - int(result[5]) <= 60:
-            click_count = 5
+        try:
+            if current_time - int(result[5]) <= 60:
+                click_count = 5
+        except:
+            click_count = 1
 
         cursor.execute("UPDATE users SET score = score + (?) WHERE token = (?)",(click_count,access_token,))
         connection.commit()
