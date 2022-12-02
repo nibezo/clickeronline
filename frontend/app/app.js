@@ -32,10 +32,11 @@ async function add() {
     console.log('OK')
     clickCount++
     document.getElementById('score').innerHTML = `${clickCount}$`
-    console.log(clickCount)
-    let color = getRandomColor()
-    let a = document.getElementsByTagName("body")
-    a[0].style.backgroundColor = color;
+    if (clickCount % 10 === 0) {
+        let color = getRandomColor()
+        let body = document.getElementsByTagName("body")
+        body[0].style.backgroundColor = color;
+    }
 }
 
 async function logout() {
