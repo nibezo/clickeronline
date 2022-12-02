@@ -229,7 +229,7 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
 @app.get("/king")
 def king(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
-        king_price = 1000
+        king_price = 3000
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
         cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
@@ -239,7 +239,7 @@ def king(access_token: Optional[str] = Cookie(default=None)):
         if(result[3] >= king_price):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
-            cursor.execute("UPDATE users SET score = score - 1000 WHERE token = (?)", (access_token,))
+            cursor.execute("UPDATE users SET score = score - 3000 WHERE token = (?)", (access_token,))
             cursor.execute("""INSERT INTO king(username) VALUES (?);""",(result[1],))
             connection.commit()
             connection.close()
