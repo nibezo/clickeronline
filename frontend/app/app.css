@@ -219,6 +219,10 @@ main {
   margin: 50px;
 }
 
+#king {
+  background-color: #ffb805;
+}
+
 @media screen and (max-width: 1530px) {
   .purchases {
     flex: 1.3;

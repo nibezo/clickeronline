@@ -1,6 +1,9 @@
 const userData = '/profile'
 const getLeaderboardData = '/leaderboard'
 const buyAMeme = '/buymeme'
+const king = '/king'
+const wipe = '/wipe'
+const boost = '/boost'
 let clickCount = 0
 let userName = ''
 let colors = ['#FBF8CC', '#FDE4CF', '#FFCFD2', '#F1C0E8', '#CFBAF0', '#A3C4F3', '#8EECF5', '#98F5E1', '#B9FBC0', '#606c38', '#bde0fe', '#fca311', '#faedcd', '#e85d04', '#99d98c', '#f5cac3', '#d62828', '#b8c0ff', '#06d6a0', '#f15bb5', '#936639', '#e56b6f', '#023e7d', '#577590', '#b5179e', '#ff4d6d', '#ff4d6d', '#ff595e', '#ccff33']
