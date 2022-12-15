@@ -136,3 +136,10 @@ function getRandomIntInRange(from, to) {
 function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
 }
+
+function beKing() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', '/king', true);
+  xhr.send();
+  location.reload();
+}
