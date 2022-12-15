@@ -8,6 +8,8 @@ const click = '/click';
 let clickCount = 0;
 let userName = '';
 let currentKing = '';
+let countOfBoosted = 0;
+let isBoost = false;
 let colors = [
   '#FBF8CC',
   '#FDE4CF',
@@ -61,11 +63,35 @@ async function getData() {
 async function add() {
   const addClick = new XMLHttpRequest();
   addClick.open('GET', click, true);
-  console.log(typeof addClick);
+  addClick.onload = () => {
+    if (addClick.response === '{"click":1}') {
+      console.log(addClick.response);
+      clickCount++;
+      addClickInDOM(clickCount);
+      isBoost = false;
+      countOfBoosted = 0;
+    } else if (addClick.response === '{"click":5}') {
+      console.log(addClick.response);
+      clickCount = clickCount + 5;
+      countOfBoosted++;
+      addClickInDOM(clickCount);
+      isBoost = true;
+    }
+  };
   addClick.send();
-  clickCount++;
-  document.getElementById('score').innerHTML = `${clickCount}$`;
-  if (clickCount % 10 === 0) {
+}
+
+function addClickInDOM(clickCountForChange) {
+  document.getElementById('score').innerHTML = `${clickCountForChange}$`;
+  changeBodyColor(clickCountForChange);
+}
+
+function changeBodyColor(clickCountForChange) {
+  if (clickCountForChange % 10 === 0) {
+    let color = getRandomColor();
+    let body = document.getElementsByTagName('body');
+    body[0].style.backgroundColor = color;
+  } else if (countOfBoosted % 10 === 0 && countOfBoosted > 0) {
     let color = getRandomColor();
     let body = document.getElementsByTagName('body');
     body[0].style.backgroundColor = color;
@@ -177,11 +203,14 @@ function wipeAll() {
 }
 
 function boostUser() {
-  if (clickCount >= 300) {
+  if (clickCount >= 300 && isBoost === false) {
     const boostXhr = new XMLHttpRequest();
     boostXhr.open('GET', '/boost', true);
     boostXhr.send();
+    document.getElementById('score').innerHTML = `${clickCount - 300}$`;
+  } else if (isBoost === true) {
+    alert('Ты уже купил буст! У тебя х5 за клик!⚡');
   } else {
-    alert(`Не хватает ${300-clickCount}$ для буста!😭`)
+    alert(`Не хватает ${300 - clickCount}$ для буста!😭`);
   }
 }
