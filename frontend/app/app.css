@@ -149,10 +149,11 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0.625rem;
 }
 
-.king-pic img {
-  width: 10rem;
+#king-name b {
+  font-size: 2rem;
 }
 
 .king-pic span {

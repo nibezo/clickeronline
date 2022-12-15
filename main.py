@@ -62,7 +62,7 @@ def check_token(access_token):
 def create_user(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("""INSERT INTO users(username, password, score, token) VALUES (?,?,?,?);""",(username,password,0,access_token))
+    cursor.execute("""INSERT INTO users(username, password, score, token, boost) VALUES (?,?,?,?,?);""",(username,password,0,access_token, 0))
     connection.commit()
     connection.close()
 

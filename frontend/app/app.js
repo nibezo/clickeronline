@@ -6,6 +6,7 @@ const wipe = '/wipe';
 const boost = '/boost';
 let clickCount = 0;
 let userName = '';
+let currentKing = '';
 let colors = [
   '#FBF8CC',
   '#FDE4CF',
@@ -48,8 +49,10 @@ async function getData() {
   xhr.onload = () => {
     clickCount = xhr.response['money'];
     userName = xhr.response['username'];
+    currentKing = xhr.response['king'];
     document.getElementById('score').innerHTML = `${clickCount}$`;
     document.getElementById('nickname').innerHTML = userName;
+    document.getElementById('king-name').innerHTML = `<b>${currentKing} 😎</b>`;
   };
   xhr.send();
 }
@@ -78,23 +81,21 @@ async function logout() {
   location.reload();
 }
 
-async function getLeaderboard() {
+function getLeaderboard() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', getLeaderboardData, true);
   xhr.responseType = 'json';
+  let idCounter = 0;
   xhr.onload = () => {
     if (document.getElementById('gamers')) {
       for (id in xhr.response) {
         document.getElementById('gamers').innerHTML += `
                 <p clsss="user">
-                    <span class="id">${id}.</span>
-                    <span class="username">${xhr.response[id]['username']} - </span>
+                    <span class="id" id="gamer${idCounter}">${id}. ${xhr.response[id]['username']} - </span>
                     <span class="money"><b>${xhr.response[id]['money']}$</b></span>
                 </p>
             `;
-        if (xhr.response[id]['username'] === userName) {
-          document.getElementById('leaderplace').innerHTML = id;
-        }
+        idCounter += 1;
       }
     }
   };
@@ -107,7 +108,6 @@ async function buyMeme() {
   xhr.responseType = 'json';
   xhr.onload = () => {
     if (xhr.response['Status'] === 'OK') {
-      console.log(clickCount);
       getData();
       let memeNum = getRandomIntInRange(1, 425);
       document.getElementById(
