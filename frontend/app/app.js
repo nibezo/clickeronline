@@ -87,11 +87,12 @@ function addClickInDOM(clickCountForChange) {
 }
 
 function changeBodyColor(clickCountForChange) {
-  if (clickCountForChange % 10 === 0) {
+  if (clickCountForChange % 10 === 0 && isBoost === false) {
     let color = getRandomColor();
     let body = document.getElementsByTagName('body');
     body[0].style.backgroundColor = color;
-  } else if (countOfBoosted % 10 === 0 && countOfBoosted > 0) {
+  } else if (countOfBoosted % 10 === 0 && countOfBoosted > 0 && isBoost === true) {
+    console.log(countOfBoosted)
     let color = getRandomColor();
     let body = document.getElementsByTagName('body');
     body[0].style.backgroundColor = color;
