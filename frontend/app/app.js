@@ -136,10 +136,18 @@ async function buyMeme() {
   xhr.onload = () => {
     if (xhr.response['Status'] === 'OK') {
       getData();
-      let memeNum = getRandomIntInRange(1, 425);
-      document.getElementById(
-        'meme'
-      ).innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px" onerror="javascript: buyMeme()">`;
+      let variantOfMeme = getRandomInt(18);
+      if (getRandomInt(2) === 1) {
+        let memeNum = getRandomIntInRange(1, 425);
+        document.getElementById(
+          'meme'
+          ).innerHTML = `<img src="https://veshok.com/dw/files/Memy/%D0%9C%D0%B5%D0%BC%20(${memeNum}).jpg" width="300px" onerror="javascript: buyMeme()">`;
+        } else {
+          document.getElementById(
+            'meme'
+            ).innerHTML = `<img src="/frontend/assets/secretmemes/${variantOfMeme}.jpg" width="300px" onerror="javascript: buyMeme()">`;
+          
+      }
     }
   };
   xhr.send();
@@ -158,6 +166,10 @@ function getRandomIntInRange(from, to) {
     result = Math.floor(Math.random() * to);
   }
   return result;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max) + 1;
 }
 
 function getRandomColor() {
