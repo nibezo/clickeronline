@@ -138,8 +138,32 @@ function getRandomColor() {
 }
 
 function beKing() {
+  let currentKing = document.getElementById('king-name').innerText.split(' ')[0];
+  let currentPlayer = document.getElementById('nickname').innerText;
+  if (currentPlayer !== currentKing) {
+    console.log(currentPlayer)
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/king', true);
+    xhr.send();
+    location.reload();
+  } else if (clickCount < 3000) {
+    alert(`Ты имеешь мало денег, накопи еще ${3000-clickCount}`)
+  } else {
+    alert('Ты уже король 😎')
+  }
+  
+    
+}
+
+function wipeAll() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/king', true);
+  xhr.open('GET', '/wipe', true);
+  xhr.onload = () => {
+    if (xhr.response === '{"Status":"OK"}') {
+      location.reload();
+    } else if (clickCount < 1000000) {
+      alert(`Мало денег для покупки вайпа! Накопи еще ${1000000-clickCount}$ и сделай вайп на сервере для всех игроков!`)
+    }
+  }
   xhr.send();
-  location.reload();
 }
