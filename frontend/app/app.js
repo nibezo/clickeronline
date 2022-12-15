@@ -4,6 +4,7 @@ const buyAMeme = '/buymeme';
 const king = '/king';
 const wipe = '/wipe';
 const boost = '/boost';
+const click = '/click';
 let clickCount = 0;
 let userName = '';
 let currentKing = '';
@@ -58,11 +59,10 @@ async function getData() {
 }
 
 async function add() {
-  const response = await fetch('/click', {
-    method: 'GET',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-  });
-  console.log('OK');
+  const addClick = new XMLHttpRequest();
+  addClick.open('GET', click, true);
+  console.log(typeof addClick);
+  addClick.send();
   clickCount++;
   document.getElementById('score').innerHTML = `${clickCount}$`;
   if (clickCount % 10 === 0) {
@@ -138,32 +138,50 @@ function getRandomColor() {
 }
 
 function beKing() {
-  let currentKing = document.getElementById('king-name').innerText.split(' ')[0];
+  let currentKing = document
+    .getElementById('king-name')
+    .innerText.split(' ')[0];
   let currentPlayer = document.getElementById('nickname').innerText;
   if (currentPlayer !== currentKing) {
-    console.log(currentPlayer)
+    console.log(currentPlayer);
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/king', true);
+    xhr.open('GET', king, true);
     xhr.send();
     location.reload();
   } else if (clickCount < 3000) {
-    alert(`Ты имеешь мало денег, накопи еще ${3000-clickCount}$ и стань королем на сервере!😎`)
+    alert(
+      `Ты имеешь мало денег, накопи еще ${
+        3000 - clickCount
+      }$ и стань королем на сервере!😎`
+    );
   } else {
-    alert('Ты уже король 😎')
+    alert('Ты уже король 😎');
   }
-  
-    
 }
 
 function wipeAll() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/wipe', true);
+  xhr.open('GET', wipe, true);
   xhr.onload = () => {
     if (xhr.response === '{"Status":"OK"}') {
       location.reload();
     } else if (clickCount < 1000000) {
-      alert(`Мало денег для покупки вайпа! Накопи еще ${1000000-clickCount}$ и сделай вайп на сервере для всех игроков!`)
+      alert(
+        `Мало денег для покупки вайпа! Накопи еще ${
+          1000000 - clickCount
+        }$ и сделай вайп на сервере для всех игроков!😇`
+      );
     }
-  }
+  };
   xhr.send();
+}
+
+function boostUser() {
+  if (clickCount >= 300) {
+    const boostXhr = new XMLHttpRequest();
+    boostXhr.open('GET', '/boost', true);
+    boostXhr.send();
+  } else {
+    alert(`Не хватает ${300-clickCount}$ для буста!😭`)
+  }
 }
