@@ -221,6 +221,7 @@ function boostUser() {
     boostXhr.open('GET', '/boost', true);
     boostXhr.send();
     document.getElementById('score').innerHTML = `${clickCount - 300}$`;
+    clickCount = clickCount - 300;
   } else if (isBoost === true) {
     alert('Ты уже купил буст! У тебя х5 за клик!⚡');
   } else {
