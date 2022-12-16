@@ -170,12 +170,23 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
         else:
             king = king[1]
 
+        place = connection.cursor()
+        place.execute("SELECT * FROM users ORDER BY score DESC")
+        place = place.fetchall()
+        user_place = 0
+        for i in range(len(place)):
+            if access_token == place[i][4]:
+                user_place = i + 1
+                break
+
+
         connection.close()
 
         data = {
             "username": result[1],
             "money": result[3],
             "king": king,
+            "user_place": user_place,
         }
 
         return data
