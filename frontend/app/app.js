@@ -53,9 +53,12 @@ async function getData() {
     clickCount = xhr.response['money'];
     userName = xhr.response['username'];
     currentKing = xhr.response['king'];
+    userPlace = xhr.response['user_place'];
+
     document.getElementById('score').innerHTML = `${clickCount}$`;
     document.getElementById('nickname').innerHTML = userName;
     document.getElementById('king-name').innerHTML = `<b>${currentKing} 😎</b>`;
+    document.getElementById('leaderplace').innerHTML = userPlace;
   };
   xhr.send();
 }
