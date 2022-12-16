@@ -65,13 +65,11 @@ async function add() {
   addClick.open('GET', click, true);
   addClick.onload = () => {
     if (addClick.response === '{"click":1}') {
-      console.log(addClick.response);
       clickCount++;
       addClickInDOM(clickCount);
       isBoost = false;
       countOfBoosted = 0;
     } else if (addClick.response === '{"click":5}') {
-      console.log(addClick.response);
       clickCount = clickCount + 5;
       countOfBoosted++;
       addClickInDOM(clickCount);
@@ -92,7 +90,6 @@ function changeBodyColor(clickCountForChange) {
     let body = document.getElementsByTagName('body');
     body[0].style.backgroundColor = color;
   } else if (countOfBoosted % 10 === 0 && countOfBoosted > 0 && isBoost === true) {
-    console.log(countOfBoosted)
     let color = getRandomColor();
     let body = document.getElementsByTagName('body');
     body[0].style.backgroundColor = color;
@@ -181,8 +178,7 @@ function beKing() {
     .getElementById('king-name')
     .innerText.split(' ')[0];
   let currentPlayer = document.getElementById('nickname').innerText;
-  if (currentPlayer !== currentKing) {
-    console.log(currentPlayer);
+  if (currentPlayer !== currentKing && clickCount >= 3000) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', king, true);
     xhr.send();
