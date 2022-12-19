@@ -10,6 +10,7 @@ import random
 import string
 import time
 
+
 def generate_token(length):
     letters = string.ascii_lowercase
     access_token = ''.join(random.choice(letters) for i in range(length))
@@ -41,7 +42,7 @@ def main(access_token: Optional[str] = Cookie(default=None)):
     if access_token == None:
         return FileResponse("frontend/login/login.html")
     else:
-        if(check_token(access_token)):
+        if (check_token(access_token)):
             return FileResponse("frontend/app/app.html")
         else:
             return {"message": "Такого токена не существует"}
@@ -50,7 +51,7 @@ def main(access_token: Optional[str] = Cookie(default=None)):
 def check_token(access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+    cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
     result = cursor.fetchone()
     connection.close()
     isTokenValid = False
@@ -62,7 +63,8 @@ def check_token(access_token):
 def create_user(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("""INSERT INTO users(username, password, score, token, boost) VALUES (?,?,?,?,?);""",(username,password,0,access_token, 0))
+    cursor.execute("""INSERT INTO users(username, password, score, token, boost) VALUES (?,?,?,?,?);""",
+                   (username, password, 0, access_token, 0))
     connection.commit()
     connection.close()
 
@@ -70,7 +72,7 @@ def create_user(username, password, access_token):
 def find_user(username, password):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("SELECT * from users WHERE username = (?) AND password = (?)",(username, password))
+    cursor.execute("SELECT * from users WHERE username = (?) AND password = (?)", (username, password))
     result = cursor.fetchone()
     connection.close()
     hasAccount = False
@@ -82,7 +84,7 @@ def find_user(username, password):
 def wrong_password(username, password):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("SELECT * from users WHERE username = (?)",(username,))
+    cursor.execute("SELECT * from users WHERE username = (?)", (username,))
     result = cursor.fetchone()
     connection.close()
 
@@ -96,20 +98,21 @@ def wrong_password(username, password):
 def update_token(username, password, access_token):
     connection = sq.connect('db.sqlite')
     cursor = connection.cursor()
-    cursor.execute("UPDATE users SET token = (?) WHERE username = (?) AND password = (?)", (access_token, username, password))
+    cursor.execute("UPDATE users SET token = (?) WHERE username = (?) AND password = (?)",
+                   (access_token, username, password))
     connection.commit()
     connection.close()
 
 
 @app.post("/signin")
-def postdata(username: str = Body(embed=True,min_length=3, max_length=11),
-             password: str =Body(embed=True,min_length=3, max_length=11)):
+def postdata(username: str = Body(embed=True, min_length=3, max_length=11),
+             password: str = Body(embed=True, min_length=3, max_length=11)):
     password = password.encode()
     password = hashlib.md5(password).hexdigest()
     access_token = generate_token(20)
     hasAccount = find_user(username, password)
-    if(hasAccount):
-        if(wrong_password(username, password)):
+    if (hasAccount):
+        if (wrong_password(username, password)):
             return False
         else:
             create_user(username, password, access_token)
@@ -147,7 +150,7 @@ def click(access_token: Optional[str] = Cookie(default=None)):
         except:
             click_count = 1
 
-        cursor.execute("UPDATE users SET score = score + (?) WHERE token = (?)",(click_count,access_token,))
+        cursor.execute("UPDATE users SET score = score + (?) WHERE token = (?)", (click_count, access_token,))
         connection.commit()
         connection.close()
         return {"click": click_count}
@@ -160,7 +163,7 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
     if access_token != None and check_token(access_token):
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
         result = cursor.fetchone()
         cursor.execute("SELECT * from king ORDER BY id DESC LIMIT 1")
         king = cursor.fetchone()
@@ -178,7 +181,6 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
             if access_token == place[i][4]:
                 user_place = i + 1
                 break
-
 
         connection.close()
 
@@ -222,11 +224,11 @@ def profile(access_token: Optional[str] = Cookie(default=None)):
         meme_price = 100
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
         result = cursor.fetchone()
         connection.close()
 
-        if(result[3] >= meme_price):
+        if (result[3] >= meme_price):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             cursor.execute("UPDATE users SET score = score - 100 WHERE token = (?)", (access_token,))
@@ -243,15 +245,15 @@ def king(access_token: Optional[str] = Cookie(default=None)):
         king_price = 3000
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
         result = cursor.fetchone()
         connection.close()
 
-        if(result[3] >= king_price):
+        if (result[3] >= king_price):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             cursor.execute("UPDATE users SET score = score - 3000 WHERE token = (?)", (access_token,))
-            cursor.execute("""INSERT INTO king(username) VALUES (?);""",(result[1],))
+            cursor.execute("""INSERT INTO king(username) VALUES (?);""", (result[1],))
             connection.commit()
             connection.close()
             return {"Status": "OK"}
@@ -265,16 +267,16 @@ def boost(access_token: Optional[str] = Cookie(default=None)):
         boost_price = 300
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
         result = cursor.fetchone()
         connection.close()
 
-        if(result[3] >= boost_price):
+        if (result[3] >= boost_price):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             boost_time = int(time.time())
             cursor.execute("UPDATE users SET score = score - 300 WHERE token = (?)", (access_token,))
-            cursor.execute("UPDATE users SET boost = (?) WHERE token = (?)", (boost_time,access_token))
+            cursor.execute("UPDATE users SET boost = (?) WHERE token = (?)", (boost_time, access_token))
             connection.commit()
             connection.close()
             return {"Status": "OK"}
@@ -288,11 +290,11 @@ def wipe(access_token: Optional[str] = Cookie(default=None)):
         wipe_price = 1000000
         connection = sq.connect('db.sqlite')
         cursor = connection.cursor()
-        cursor.execute("SELECT * from users WHERE token = (?)",(access_token,))
+        cursor.execute("SELECT * from users WHERE token = (?)", (access_token,))
         result = cursor.fetchone()
         connection.close()
 
-        if(result[3] >= wipe_price):
+        if (result[3] >= wipe_price):
             connection = sq.connect('db.sqlite')
             cursor = connection.cursor()
             cursor.execute("UPDATE users SET score = 0")
