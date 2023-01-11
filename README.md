@@ -2,6 +2,8 @@
 
 Simple full-stack project with [ultimatulny](https://github.com/ultimatulny). FastAPI on backend, clean JS/HTML/CSS on frontend. 
 
+Video with main functions: https://youtu.be/a234fPHqatE
+
 # Sign up/Log in page:
 ![image](https://user-images.githubusercontent.com/52705623/199919236-34e02a19-7dcb-48eb-adb6-b734d2ed93aa.png)
 
